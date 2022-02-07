@@ -1,4 +1,5 @@
 " ==== Basic settings ====
+"
 syntax enable
 set termguicolors
 set nocompatible
@@ -22,7 +23,7 @@ set grepprg=rg\ --vimgrep
 
 " ==== Plugins ====
 call plug#begin('~/.vim/plugged')
-  Plug 'neoclide/coc.nvim' " Language server framework
+  Plug 'neoclide/coc.nvim', {'branch': 'release'} " Language server framework
 
   " ==== June Gunn's plugins (author of vim-plug) ====
   Plug 'junegunn/seoul256.vim' " Theme
