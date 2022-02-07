@@ -96,14 +96,14 @@ path+="$HOME/.bin"
 path+="$HOME/.local/bin"
 path+="$HOME/bin"
 path+="$HOME/.npm-global/bin"
-path+="$(ruby -e 'print Gem.user_dir')/bin"
 path+="$HOME/.mix"
-path+="$(go env GOPATH)/bin"
 path+="$HOME/.cargo/bin"
 path+="$HOME/.azure/bin"
+command -v ruby &>/dev/null && path+="$(ruby -e 'print Gem.user_dir')/bin"
+command -v go &>/dev/null && path+="$(go env GOPATH)/bin"
 
 export PATH
-export GOPATH="$(go env GOPATH)"
+command -v go &>/dev/null && export GOPATH="$(go env GOPATH)"
 
 #===============#
 # Powerlevel 9k #
