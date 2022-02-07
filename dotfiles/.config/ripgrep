@@ -1,0 +1,8 @@
+# --max-columns=0
+--smart-case
+--line-number
+# --hidden
+# --follow
+# --context=2
+# --glob="!.git/*"
+--color=always

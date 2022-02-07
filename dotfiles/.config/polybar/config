@@ -1,0 +1,366 @@
+[colours]
+background = #272822
+primary = #F8F8F2
+secondary = #75715E
+
+pink = #F92672
+orange = #FD971F
+yellow = #E6DB74
+green = #A6E22E
+blue = #66D9EF
+purple = #AE81FF
+light_orange = #E69F66
+
+alert = ${colours.pink}
+warn = ${colours.yellow}
+err = ${colours.orange}
+good = ${colours.green}
+
+[bar/top]
+height = 28
+width = 100%
+module-margin = 2
+
+font-0 = "Noto Sans UI:size=11;2"
+font-1 = "FuraCode Nerd Font Mono:style=Retina,Regular:size=11"
+font-2 = "Font Awesome 5 Pro Light:style=Light:size=16;2"
+
+background = ${colours.background}
+foreground = ${colours.primary}
+line-size = 4
+
+fixed-center = true
+modules-left = i3 powermenu
+;modules-center = mpd
+modules-right = cpu memory battery date
+
+tray-position = right
+tray-padding = 4
+
+scroll-up = i3wm-wsnext
+scroll-down = i3wm-wsprev
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+[module/i3]
+type = internal/i3
+format = <label-state> <label-mode>
+index-sort = true
+wrapping-scroll = true
+
+; Only show workspaces on the same output as the bar
+;pin-workspaces = true
+
+label-mode-padding = 2
+label-mode-foreground = #000
+label-mode-background = ${colours.primary}
+
+; focused = Active workspace on focused monitor
+label-focused = %index%
+label-focused-background = ${colours.background}
+label-focused-underline= ${colours.secondary}
+label-focused-padding = 2
+
+; unfocused = Inactive workspace on any monitor
+label-unfocused = %index%
+label-unfocused-padding = 2
+label-unfocused-foreground = ${colours.secondary}
+
+; visible = Active workspace on unfocused monitor
+label-visible = %index%
+label-visible-background = ${self.label-focused-background}
+label-visible-underline = ${self.label-focused-underline}
+label-visible-padding = ${self.label-focused-padding}
+
+; urgent = Workspace with urgency hint set
+label-urgent = %index%
+label-urgent-background = ${colours.background}
+label-urgent-foreground = ${colours.pink}
+label-urgent-padding = 2
+
+; Separator in between workspaces
+; label-separator = |
+
+
+[module/mpd]
+type = internal/mpd
+format-online = <label-song>  <icon-prev> <icon-stop> <toggle> <icon-next>
+
+icon-prev = 
+icon-stop = 
+icon-play = 
+icon-pause = 
+icon-next = 
+
+label-song-maxlen = 25
+label-song-ellipsis = true
+
+[module/xbacklight]
+type = internal/xbacklight
+
+format = <label> <bar>
+label = BL
+
+bar-width = 10
+bar-indicator = |
+bar-indicator-foreground = #fff
+bar-indicator-font = 2
+bar-fill = ─
+bar-fill-font = 2
+bar-fill-foreground = #9f78e1
+bar-empty = ─
+bar-empty-font = 2
+bar-empty-foreground = ${colours.secondary}
+
+[module/cpu]
+type = internal/cpu
+interval = 1
+label = %percentage:2%%
+
+format-foreground = ${colours.primary}
+
+format-prefix-margin-right = 1.25
+format-prefix = "CPU"
+format-prefix-foreground = ${colours.secondary}
+
+[module/memory]
+type = internal/memory
+interval = 1
+label = %gb_used%/%gb_total%
+
+format-foreground = ${colours.primary}
+
+format-prefix = RAM
+format-prefix-margin-right = 1.25
+format-prefix-foreground = ${colours.secondary}
+
+[module/date]
+type = internal/date
+interval = 1
+
+date =
+date-alt = "%Y-%m-%d"
+
+time = %H:%M
+time-alt = %H:%M:%S
+
+label = %date% %time%
+
+[module/pulseaudio]
+type = internal/pulseaudio
+
+format-volume = <label-volume> <bar-volume>
+label-volume = VOL %percentage%%
+label-volume-foreground = ${root.foreground}
+
+label-muted = 🔇 muted
+label-muted-foreground = #666
+
+bar-volume-width = 10
+bar-volume-foreground-0 = #55aa55
+bar-volume-foreground-1 = #55aa55
+bar-volume-foreground-2 = #55aa55
+bar-volume-foreground-3 = #55aa55
+bar-volume-foreground-4 = #55aa55
+bar-volume-foreground-5 = #f5a70a
+bar-volume-foreground-6 = #ff5555
+bar-volume-gradient = false
+bar-volume-indicator = |
+bar-volume-indicator-font = 2
+bar-volume-fill = ─
+bar-volume-fill-font = 2
+bar-volume-empty = ─
+bar-volume-empty-font = 2
+bar-volume-empty-foreground = ${colours.secondary}
+
+[module/battery]
+type = internal/battery
+battery = BAT0
+adapter = AC
+full-at = 94
+
+format-charging = <animation-charging> <label-charging>
+format-charging-underline = ${colours.good}
+format-charging-prefix = ""
+format-charging-prefix-margin-right = 2
+format-charging-prefix-foreground = ${colours.primary}
+format-charging-prefix-font = 3
+
+format-discharging = <animation-discharging> <label-discharging>
+format-discharging-underline = ${colours.alert}
+format-discharging-prefix-font = 3
+
+format-full = 
+format-full-foreground = ${colours.secondary}
+format-full-font = 3
+
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+ramp-capacity-foreground = ${colours.primary}
+
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-3 = 
+animation-charging-4 = 
+animation-charging-foreground = ${colours.primary}
+animation-charging-framerate = 100
+
+animation-discharging-0 = 
+animation-discharging-1 = 
+animation-discharging-2 = 
+animation-discharging-3 = 
+animation-discharging-4 = 
+animation-discharging-foreground = ${colours.primary}
+animation-discharging-framerate = 1000
+
+[module/powermenu]
+type = custom/menu
+
+expand-right = true
+
+format-spacing = 1
+label-font = 3
+
+label-open = 
+label-open-foreground = ${colours.secondary}
+label-open-font = 3
+label-open-padding-left = 3.5
+
+label-close = 
+label-close-foreground = ${colours.secondary}
+label-close-font = 3
+label-close-padding-left = 4
+
+label-separator = |
+label-separator-foreground = #00
+label-separator-margin = 2
+
+menu-font = 3
+menu-separator-margin = 2
+
+# Main menu
+menu-0-0 = 
+menu-0-0-exec = menu-open-1
+menu-0-0-font = 3
+menu-0-1 = 
+menu-0-1-exec = menu-open-2
+menu-0-1-font = 3
+menu-0-2 = 
+menu-0-2-exec = menu-open-3
+menu-0-2-font = 3
+menu-0-3 = 
+menu-0-3-exec = menu-open-4
+menu-0-3-font = 3
+menu-0-4 = 
+menu-0-4-exec = menu-open-5
+menu-0-4-font = 3
+
+# Confirm power off
+menu-1-0 = 
+menu-1-0-exec = i3exit shutdown
+menu-1-0-foreground = ${colours.alert}
+menu-1-0-font = 3
+menu-1-1 = 
+menu-1-1-exec = menu-open-2
+menu-1-1-font = 3
+menu-1-2 = 
+menu-1-2-exec = menu-open-3
+menu-1-2-font = 3
+menu-1-3 = 
+menu-1-3-exec = menu-open-3
+menu-1-3-font = 3
+menu-1-4 = 
+menu-1-4-exec = menu-open-4
+menu-1-4-font = 3
+
+# Confirm reboot
+menu-2-0 = 
+menu-2-0-exec = menu-open-1
+menu-2-0-font = 3
+menu-2-1 = 
+menu-2-1-exec = i3exit reboot
+menu-2-1-foreground = ${colours.alert}
+menu-2-1-font = 3
+menu-2-2 = 
+menu-2-2-exec = menu-open-3
+menu-2-2-font = 3
+menu-2-3 = 
+menu-2-3-exec = menu-open-3
+menu-2-3-font = 3
+menu-2-4 = 
+menu-2-4-exec = menu-open-4
+menu-2-4-font = 3
+
+# Confirm sleep
+menu-3-0 = 
+menu-3-0-exec = menu-open-1
+menu-3-0-font = 3
+menu-3-1 = 
+menu-3-1-exec = menu-open-2
+menu-3-1-font = 3
+menu-3-2 = 
+menu-3-2-exec = i3exit suspend
+menu-3-2-foreground = ${colours.alert}
+menu-3-2-font = 3
+menu-3-3 = 
+menu-3-3-exec = menu-open-4
+menu-3-3-font = 3
+menu-3-4 = 
+menu-3-4-exec = menu-open-5
+menu-3-4-font = 3
+
+
+# Confirm logout
+menu-4-0 = 
+menu-4-0-exec = menu-open-1
+menu-4-0-font = 3
+menu-4-1 = 
+menu-4-1-exec = menu-open-2
+menu-4-1-font = 3
+menu-4-2 = 
+menu-4-2-exec = menu-open-3
+menu-4-2-font = 3
+menu-4-3 = 
+menu-4-3-exec = i3menu logout
+menu-4-3-foreground = ${colours.alert}
+menu-4-3-font = 3
+menu-4-4 = 
+menu-4-4-exec = menu-open-5
+menu-4-4-font = 3
+
+# Confirm lock
+menu-5-0 = 
+menu-5-0-exec = menu-open-1
+menu-5-0-font = 3
+menu-5-1 = 
+menu-5-1-exec = menu-open-2
+menu-5-1-font = 3
+menu-5-2 = 
+menu-5-2-exec = menu-open-3
+menu-5-2-font = 3
+menu-5-3 = 
+menu-5-3-exec = menu-open-4
+menu-5-3-font = 3
+menu-5-4 = 
+menu-5-4-exec = i3exit lock
+menu-5-4-foreground = ${colours.alert}
+menu-5-4-font = 3
+
+[settings]
+screenchange-reload = true
+;compositing-background = xor
+;compositing-background = screen
+;compositing-foreground = source
+;compositing-border = over
+;pseudo-transparency = false
+
+[global/wm]
+margin-top = 5
+margin-bottom = 5
+
+; vim:ft=dosini

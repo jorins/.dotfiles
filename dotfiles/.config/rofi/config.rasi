@@ -1,0 +1,10 @@
+configuration {
+  combi-modi: "window,drun,ssh";
+  // modi: "window,drun,ssh,combi";
+  width: 35;
+  lines: 25;
+  // theme: "Monokai-clean";
+  font: "FuraCode Nerd Font Mono 14";
+  show-icons: true;
+  icon-theme: "Papirus-Dark";
+}
