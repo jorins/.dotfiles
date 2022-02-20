@@ -127,15 +127,6 @@ export LIBVIRT_DEFAULT_URI="qemu:///system"
 export MYGITDIR="$HOME/Git"
 export LESS="IFR"
 export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep"
-export FZF_DEFAULT_COMMAND='rg --files'
-export FZF_DEFAULT_OPTS='--height 40% --multi --reverse --border --prompt "|> "
-  --bind=ctrl-p:toggle-preview
-  --color=fg:252,hl:67,fg+:252,bg+:235,hl+:81,info:144,prompt:161,spinner:135,pointer:135,marker:118
-  --preview-window=right:50%:hidden
-  --preview "[[ $(file --mime {}) =~ binary ]] &&
-  echo {} is a binary file or a directory. ||
-  (highlight -O ansi -s molokai -l {} ||
-  cat {}) 2> /dev/null | head -100"'
 
 # GPG SSH agent
 export GPG_TTY="$(tty)"
