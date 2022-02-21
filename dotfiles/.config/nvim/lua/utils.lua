@@ -65,4 +65,60 @@ function utils.configurator(scope, prefix, separator)
   end
 end
 
+---@alias server_spec detailed_server_spec | string
+--
+---@param opts lsp_opts
+--
+---@class lsp_opts
+---@field config table
+---@field servers server_spec[]
+--
+---@class detailed_server_spec
+---@field name string
+---@field config table
+--
+---@return fun() -> nil
+function utils.configure_lsp(opts)
+  return function()
+    local lspconfig = require('lspconfig')
+    local coq = require('coq')
+    local coqify = coq.lsp_ensure_capabilities
+
+    for index, server in pairs(opts.servers) do
+      print('Processing ' .. name)
+      local name
+      local config = {}
+
+      -- Copy our defaults to the new table
+      for key, val in pairs(opts.config) do
+        config[key] = val
+      end
+
+      if type(server) == 'string' then
+        -- If it's a string, that's all we need
+        name = server
+
+      elseif type(server) == 'table' then
+        -- It's a table, extract name and override defaults
+        name = server.name
+        for key, val in pairs(server.config) do
+          config[key] = val
+        end
+
+      else
+        -- It's neither, that's not right
+        error(string.format(
+          'Unhandled type of server specification #%s, expected server or string but got %s',
+          index, type(server)
+        ))
+      end
+
+      print(index .. '. ' .. name .. ' -> ' .. vim.inspect(config))
+
+      -- Finally run the configuration with generated settings
+      lspconfig[name].setup(coqify(config))
+    end
+  end
+end
+
 return utils

@@ -3,9 +3,45 @@ local fn = vim.fn
 local o = vim.opt
 local g = vim.g
 
-local utils = require 'utils'
+cmd('command! Reload write | source ~/.config/nvim/init.lua | PackerSync')
+
+local utils = require('utils')
 local set = utils.set
 local map = utils.mapAll
+-- local configure_lsp = utils.configure_lsp
+
+function configure_lsp(opts)
+  return function()
+    for index, server in ipairs(opts.servers) do
+      local name
+      local config = {}
+
+      -- Copy our defaults to the new table
+      for key, val in pairs(opts.config) do
+        config[key] = val
+      end
+
+      if type(server) == 'string' then
+        -- If it's a string, that's all we need
+        name = server
+
+      elseif type(server) == 'table' then
+        -- It's a table, extract name and override defaults
+        name = server.name
+        for key, val in pairs(server.config) do
+          config[key] = val
+        end
+
+      else
+        -- It's neither, that's not right
+        error('Unhandled type of server specification')
+      end
+
+      -- Finally run the configuration with generated settings
+      opts.lspconfig[name].setup(opts.coq.lsp_ensure_capabilities(config))
+    end
+  end
+end
 
 -------------
 -- Plugins --
@@ -20,69 +56,40 @@ require('packer').startup(function (use)
 
     -- LSP configs
     {
+      -- Install most servers with
+      -- $ npm install --global vscode-langservers-extracted stylelint-lsp typescript typescript-language-server yaml-language-server vim-language-server
       'neovim/nvim-lspconfig',
       requires = { 'ms-jpq/coq_nvim' },
-      config = function()
-        local lspconfig = require 'lspconfig'
-        local coqify = require('coq').lsp_ensure_capabilities
+      config = configure_lsp({
+        lspconfig = require('lspconfig'),
+        cow = require('coq'),
+        config =  {},
+        -- on_attach = function(client, bufno)
+        --   -- cmd([[ autocmd BufWritePre <buffer=> lua vim.lsp.buf.formatting_sync() ]])
+        -- end,
 
-        local on_attach = function(client, bufno)
-          -- Format on save
-          cmd([[ autocmd BufWritePre <buffer=> lua vim.lsp.buf.formatting_sync() ]])
-        end
-
-        local servers = {
-          -- Install most servers with
-          -- $ npm install --global vscode-langservers-extracted stylelint-lsp typescript typescript-language-server yaml-language-server vim-language-server
-
-          -- General purpose languages
+        servers = {
+          'bicep',
           'elixirls',
+          'eslint',
+          'gdscript',
           'gopls',
-          { 'sumneko_lua', {
-            settings = {
-              Lua = {
-                diagnostics = { globals = { 'vim' } },
-                workspace = { library = vim.api.nvim_get_runtime_file("", true), },
-          } } } },
+          'html',
+          'jsonls',
           'powershell_es',
           'pylsp',
-          'typeprof',
           'rust_analyzer',
-
-          -- Web
-          'eslint',
-          'html',
           'stylelint_lsp',
           'svelte',
           'tsserver',
-
-          -- DSLs
-          'gdscript',
+          'typeprof',
           'vimls',
-
-          -- Data
-          'bicep',
-          'jsonls',
           'yamlls',
-        }
-
-        for _, server in pairs(servers) do
-          -- Assume plain string by default and build default config
-          local name = server
-          local config = { on_attach = on_attach }
-
-          if type(server) == 'table' then
-            -- If table, override
-            name = server[1]
-            for key, val in pairs(server[2]) do
-              config[key] = val
-            end
-          end
-
-          lspconfig[name].setup(coqify(config))
-        end
-      end
+          -- { name = 'sumneko_lua', config = { settings = { Lua = { diagnostics = { globals = { 'vim' } }, workspace = { library = vim.api.nvim_get_runtime_file("", true), }, } } } },
+        },
+      }),
     },
+
 
     -- Treesitter
     {
