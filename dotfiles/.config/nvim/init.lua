@@ -10,130 +10,201 @@ local map = utils.mapAll
 -------------
 -- Plugins --
 -------------
-require('packer').startup(function ()
+require('packer').startup(function (use)
   -- Core
-  use { 'wbthomason/packer.nvim' } -- Package manager
-  use { -- LSP configs
-    'neovim/nvim-lspconfig',
-    requires = { 'ms-jpq/coq_nvim' },
-    config = function() 
-      local lsp = require 'lspconfig'
-      local coqify = require('coq').lsp_ensure_capabilities
-      -- Install most with
-      -- $ npm install --global vscode-langservers-extracted stylelint-lsp typescript typescript-language-server yaml-language-server vim-language-server
+  use {
+    -- Package manager
+    {
+      'wbthomason/packer.nvim'
+    },
 
-      -- Web
-      lsp.eslint.setup(coqify {}) -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#eslint
-      lsp.html.setup(coqify {}) -- npm i -g vscode-langservers-extracted
-      lsp.stylelint_lsp.setup(coqify {}) -- npm i -g stylelint-lsp
-      lsp.svelte.setup(coqify {}) -- npm install -g svelte-language-server
-      lsp.tsserver.setup(coqify {}) -- npm install -g typescript typescript-language-server
+    -- LSP configs
+    {
+      'neovim/nvim-lspconfig',
+      requires = { 'ms-jpq/coq_nvim' },
+      config = function()
+        local lspconfig = require 'lspconfig'
+        local coqify = require('coq').lsp_ensure_capabilities
 
-      -- Data
-      lsp.bicep.setup(coqify { cmd = { 'dotnet', '/bin/false' } }) -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#bicep }
-      lsp.jsonls.setup(coqify {}) -- npm i -g vscode-langservers-extracted
-      lsp.yamlls.setup(coqify {}) -- yarn global add yaml-language-server
+        local on_attach = function(client, bufno)
+          -- Format on save
+          cmd([[ autocmd BufWritePre <buffer=> lua vim.lsp.buf.formatting_sync() ]])
+        end
 
-      -- DSLs
-      lsp.gdscript.setup(coqify {})
-      lsp.vimls.setup(coqify {}) -- npm install -g vim-language-server
+        local servers = {
+          -- Install most servers with
+          -- $ npm install --global vscode-langservers-extracted stylelint-lsp typescript typescript-language-server yaml-language-server vim-language-server
 
-      -- General purpose languages
-      lsp.elixirls.setup(coqify { cmd = { '/bin/false' } }) -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#elixirls
-      lsp.gopls.setup(coqify {})
-      lsp.sumneko_lua.setup(coqify {})
-      lsp.powershell_es.setup(coqify {}) -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#powershell_es
-      lsp.pylsp.setup(coqify {}) -- pipx install 'python-lsp-server[all]'
-      lsp.typeprof.setup(coqify {})
-      lsp.rust_analyzer.setup(coqify {})
-    end
-  }
-  use { -- Treesitter
-    'nvim-treesitter/nvim-treesitter',
-    run = ':TSUpdate',
-    config = function()
-      require('nvim-treesitter.configs').setup {
-        ensure_installed = 'maintained',
-        highlight = {
-          enable = true,
-        },
+          -- General purpose languages
+          'elixirls',
+          'gopls',
+          { 'sumneko_lua', {
+            settings = {
+              Lua = {
+                diagnostics = { globals = { 'vim' } },
+                workspace = { library = vim.api.nvim_get_runtime_file("", true), },
+          } } } },
+          'powershell_es',
+          'pylsp',
+          'typeprof',
+          'rust_analyzer',
 
-        indent = {
-          enable = true,
-        },
+          -- Web
+          'eslint',
+          'html',
+          'stylelint_lsp',
+          'svelte',
+          'tsserver',
 
-        textobjects = {
-          lsp_interop = {
+          -- DSLs
+          'gdscript',
+          'vimls',
+
+          -- Data
+          'bicep',
+          'jsonls',
+          'yamlls',
+        }
+
+        for _, server in pairs(servers) do
+          -- Assume plain string by default and build default config
+          local name = server
+          local config = { on_attach = on_attach }
+
+          if type(server) == 'table' then
+            -- If table, override
+            name = server[1]
+            for key, val in pairs(server[2]) do
+              config[key] = val
+            end
+          end
+
+          lspconfig[name].setup(coqify(config))
+        end
+      end
+    },
+
+    -- Treesitter
+    {
+      'nvim-treesitter/nvim-treesitter',
+      run = ':TSUpdate',
+      config = function()
+        require('nvim-treesitter.configs').setup {
+          ensure_installed = 'maintained',
+          highlight = {
             enable = true,
           },
-        },
-      }
-    end
+
+          indent = {
+            enable = true,
+          },
+
+          textobjects = {
+            lsp_interop = {
+              enable = true,
+            },
+          },
+        }
+      end
+    },
   }
 
-  -- Completion
-  use 'ms-jpq/coq_nvim'
-  use 'ms-jpq/coq.artifacts'
-
-  -- Fuzzy finding
+  -- Extension
   use {
-    'nvim-telescope/telescope.nvim',
-    requires = {
-      'nvim-lua/plenary.nvim',
+    -- Completion
+    { 'ms-jpq/coq_nvim' },
+
+    -- Snippets
+    { 'ms-jpq/coq.artifacts' },
+
+    -- Fuzzy finding
+    {
+      'nvim-telescope/telescope.nvim',
+      requires = {
+        'nvim-lua/plenary.nvim',
       { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' },
+      },
+      config = function()
+        local telescope = require('telescope')
+        telescope.setup {}
+        telescope.load_extension('fzf')
+      end
     },
-    config = function()
-      local telescope = require('telescope')
-      telescope.setup {}
-      telescope.load_extension('fzf')
-    end
   }
 
   -- GUI
-  use { 'junegunn/seoul256.vim' } -- Theme
+  use {
+    -- Theme
+    {
+      'junegunn/seoul256.vim'
+    },
 
-  use { -- File explorer
-    'ms-jpq/chadtree',
-    branch = 'chad',
-    run = 'python3 -m chadtree deps',
-    config = function()
-    end
-  }
+    -- File explorer
+    {
+      'ms-jpq/chadtree',
+      branch = 'chad',
+      run = 'python3 -m chadtree deps',
+    },
 
-  use { -- Git gutter
-    'lewis6991/gitsigns.nvim',
-    requires = { 'nvim-lua/plenary.nvim' },
-    config = function()
-      require('gitsigns').setup()
-    end
+    -- Git gutter
+    {
+      'lewis6991/gitsigns.nvim',
+      requires = { 'nvim-lua/plenary.nvim' },
+      config = function()
+        require('gitsigns').setup()
+      end
+    },
   }
 
   -- Utilities
-  use { 'tversteeg/registers.nvim' } -- Register peeking
-  use { -- Comments
-    'numToStr/Comment.nvim',
-    config = function()
-      require('Comment').setup()
-    end
-  }
-  use { -- Indentation indicators
-    "lukas-reineke/indent-blankline.nvim",
-    config = function()
-      require('indent_blankline').setup {
-        space_char_blankline = ' ',
-        show_current_context = true,
-        show_current_context_start = true,
-      }
-    end
-  }
+  use {
+    -- Register peeking
+    {
+      'tversteeg/registers.nvim'
+    },
 
-  -- use {  } -- Surrounding
-  use { 'junegunn/vim-easy-align' } -- Alignment, not neovim based
-  use { -- Colour rendering
-    'norcalli/nvim-colorizer.lua',
-    config = function()
-      require('colorizer').setup()
-    end
+    -- Comments
+    {
+      'numToStr/Comment.nvim',
+      config = function()
+        require('Comment').setup()
+      end
+    },
+
+    -- Indentation indicators
+    {
+      "lukas-reineke/indent-blankline.nvim",
+      config = function()
+        require('indent_blankline').setup {
+          -- Config seems broken, so it's also set with g: variables
+          space_char_blankline = ' ',
+          context_char = '¦',
+          show_current_context = true,
+          show_current_context_start = false,
+          use_treesitter = true,
+          char_list = {' '},
+        }
+      end
+    },
+
+    --[[
+    -- Surrounding
+    -- Looking for a solution here.
+    --{  }
+    --]]
+
+    -- Alignment, not neovim based
+    {
+        'junegunn/vim-easy-align'
+    },
+
+    -- Colour rendering
+    {
+      'norcalli/nvim-colorizer.lua',
+      config = function()
+        require('colorizer').setup()
+      end
+    },
   }
 end)
 
@@ -168,8 +239,18 @@ set {
   updatetime = 100,
   scrolloff = 8,
   sidescrolloff = 10,
-  colorcolumn = '81',
+  -- colorcolumn = '81',
 }
+
+--[[ indentBlankline {
+  -- Config seems broken, so it's also set with g: variables
+  space_char_blankline = ' ',
+  context_char = '¦',
+  show_current_context = true,
+  show_current_context_start = false,
+  use_treesitter = true,
+  char_list = {' '},
+} ]]
 
 g.chadtree_settings = { keymap = {
   primary = { '<Enter>', 'l' },
@@ -179,7 +260,6 @@ g.chadtree_settings = { keymap = {
 g.coq_settings = {
   auto_start = 'shut-up'
 }
-
 
 --------------
 -- Commands --
