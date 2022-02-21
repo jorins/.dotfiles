@@ -1,2 +1,1 @@
-dotfiles/.config/nvim/.netrwhist
-dotfiles/.gitconfig
+dotfiles/.config/nvim/plugin/packer_compiled.lua
