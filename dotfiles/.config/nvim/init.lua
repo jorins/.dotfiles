@@ -1,72 +1,24 @@
-local cmd = vim.cmd
-local fn = vim.fn
-local o = vim.opt
-local g = vim.g
-
-cmd('command! Reload write | source ~/.config/nvim/init.lua | PackerSync')
-
 local utils = require('utils')
 local set = utils.set
 local map = utils.mapAll
--- local configure_lsp = utils.configure_lsp
 
-function configure_lsp(opts)
-  return function()
-    for index, server in ipairs(opts.servers) do
-      local name
-      local config = {}
-
-      -- Copy our defaults to the new table
-      for key, val in pairs(opts.config) do
-        config[key] = val
-      end
-
-      if type(server) == 'string' then
-        -- If it's a string, that's all we need
-        name = server
-
-      elseif type(server) == 'table' then
-        -- It's a table, extract name and override defaults
-        name = server.name
-        for key, val in pairs(server.config) do
-          config[key] = val
-        end
-
-      else
-        -- It's neither, that's not right
-        error('Unhandled type of server specification')
-      end
-
-      -- Finally run the configuration with generated settings
-      opts.lspconfig[name].setup(opts.coq.lsp_ensure_capabilities(config))
-    end
-  end
-end
-
--------------
--- Plugins --
--------------
+--[[ Plugins ]]--
 require('packer').startup(function (use)
-  -- Core
-  use {
-    -- Package manager
-    {
-      'wbthomason/packer.nvim'
-    },
+  use { -- Core
+    'wbthomason/packer.nvim', -- Package manager
 
-    -- LSP configs
-    {
+
+    { -- LSP configs
       -- Install most servers with
       -- $ npm install --global vscode-langservers-extracted stylelint-lsp typescript typescript-language-server yaml-language-server vim-language-server
       'neovim/nvim-lspconfig',
       requires = { 'ms-jpq/coq_nvim' },
-      config = configure_lsp({
-        lspconfig = require('lspconfig'),
-        cow = require('coq'),
-        config =  {},
-        -- on_attach = function(client, bufno)
-        --   -- cmd([[ autocmd BufWritePre <buffer=> lua vim.lsp.buf.formatting_sync() ]])
-        -- end,
+      config = function() require('utils').configure_lsp({
+        config =  {
+          on_attach = function(client, bufno)
+            vim.cmd([[ autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync() ]])
+          end,
+        },
 
         servers = {
           'bicep',
@@ -85,14 +37,17 @@ require('packer').startup(function (use)
           'typeprof',
           'vimls',
           'yamlls',
-          -- { name = 'sumneko_lua', config = { settings = { Lua = { diagnostics = { globals = { 'vim' } }, workspace = { library = vim.api.nvim_get_runtime_file("", true), }, } } } },
+          {
+            name = 'sumneko_lua',
+            config = { settings = { Lua = {
+              diagnostics = { globals = { 'vim' } },
+              workspace = { library = vim.api.nvim_get_runtime_file('', true), },
+          } } } },
         },
-      }),
+      }) end
     },
 
-
-    -- Treesitter
-    {
+    { -- Treesitter
       'nvim-treesitter/nvim-treesitter',
       run = ':TSUpdate',
       config = function()
@@ -116,20 +71,18 @@ require('packer').startup(function (use)
     },
   }
 
-  -- Extension
-  use {
-    -- Completion
-    { 'ms-jpq/coq_nvim' },
+  use { -- Extension
+    'ms-jpq/coq_nvim', -- Completion
+    'ms-jpq/coq.artifacts', -- Snippets
 
-    -- Snippets
-    { 'ms-jpq/coq.artifacts' },
-
-    -- Fuzzy finding
-    {
+    { -- Fuzzy finding
       'nvim-telescope/telescope.nvim',
       requires = {
         'nvim-lua/plenary.nvim',
-      { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' },
+        {
+          'nvim-telescope/telescope-fzf-native.nvim',
+          run = 'make',
+        },
       },
       config = function()
         local telescope = require('telescope')
@@ -139,22 +92,16 @@ require('packer').startup(function (use)
     },
   }
 
-  -- GUI
-  use {
-    -- Theme
-    {
-      'junegunn/seoul256.vim'
-    },
+  use { -- GUI
+    'junegunn/seoul256.vim', -- Theme
 
-    -- File explorer
-    {
+    { -- File explorer
       'ms-jpq/chadtree',
       branch = 'chad',
       run = 'python3 -m chadtree deps',
     },
 
-    -- Git gutter
-    {
+    { -- Git gutter
       'lewis6991/gitsigns.nvim',
       requires = { 'nvim-lua/plenary.nvim' },
       config = function()
@@ -163,27 +110,20 @@ require('packer').startup(function (use)
     },
   }
 
-  -- Utilities
-  use {
-    -- Register peeking
-    {
-      'tversteeg/registers.nvim'
-    },
+  use { -- Utilities
+    'tversteeg/registers.nvim', -- Register peeking
 
-    -- Comments
-    {
+    { -- Comments
       'numToStr/Comment.nvim',
       config = function()
         require('Comment').setup()
       end
     },
 
-    -- Indentation indicators
-    {
-      "lukas-reineke/indent-blankline.nvim",
+    { -- Indentation indicators
+      'lukas-reineke/indent-blankline.nvim',
       config = function()
         require('indent_blankline').setup {
-          -- Config seems broken, so it's also set with g: variables
           space_char_blankline = ' ',
           context_char = '¦',
           show_current_context = true,
@@ -194,19 +134,9 @@ require('packer').startup(function (use)
       end
     },
 
-    --[[
-    -- Surrounding
-    -- Looking for a solution here.
-    --{  }
-    --]]
+    'junegunn/vim-easy-align', -- Alignment, not neovim based
 
-    -- Alignment, not neovim based
-    {
-        'junegunn/vim-easy-align'
-    },
-
-    -- Colour rendering
-    {
+    { -- Colour rendering
       'norcalli/nvim-colorizer.lua',
       config = function()
         require('colorizer').setup()
@@ -215,13 +145,10 @@ require('packer').startup(function (use)
   }
 end)
 
--------------
--- Options --
--------------
-
+--[[ Options ]]--
 -- Theme
-g.seoul256_background = 234
-cmd 'colorscheme seoul256'
+vim.g.seoul256_background = 234
+vim.cmd 'colorscheme seoul256'
 
 -- Basic settings
 set {
@@ -246,38 +173,23 @@ set {
   updatetime = 100,
   scrolloff = 8,
   sidescrolloff = 10,
-  -- colorcolumn = '81',
 }
 
---[[ indentBlankline {
-  -- Config seems broken, so it's also set with g: variables
-  space_char_blankline = ' ',
-  context_char = '¦',
-  show_current_context = true,
-  show_current_context_start = false,
-  use_treesitter = true,
-  char_list = {' '},
-} ]]
-
-g.chadtree_settings = { keymap = {
+vim.g.chadtree_settings = { keymap = {
   primary = { '<Enter>', 'l' },
   collapse = { '<S-Tab>', '`', 'h' }
 }}
 
-g.coq_settings = {
+vim.g.coq_settings = {
   auto_start = 'shut-up'
 }
 
---------------
--- Commands --
---------------
+--[[ Commands ]]--
 
 -- Highlight on yank
-cmd [[ autocmd TextYankPost * lua vim.highlight.on_yank {on_visual = true} ]]
+vim.cmd [[ autocmd TextYankPost * lua vim.highlight.on_yank {on_visual = true} ]]
 
---------------
--- Bindings --
---------------
+--[[ Bindings ]]--
 local silent = {
   silent = true,
   noremap = true,
@@ -296,8 +208,8 @@ map {
   { 'n', '<A-k>', ':m .-2<CR>==', silent },
   { 'i', '<A-down>', '<Esc>:m .+1<CR>==gi', silent },
   { 'i', '<A-up>', '<Esc>:m .-2<CR>==gi', silent },
-  { 'v', '<A-j>', ":m '>+1<CR>gv=gv", silent },
-  { 'v', '<A-k>', ":m '<-2<CR>gv=gv", silent },
+  { 'v', '<A-j>', [[:m '>+1<CR>gv=gv]], silent },
+  { 'v', '<A-k>', [[:m '<-2<CR>gv=gv]], silent },
 
   -- Indentation control with tab
   { 'n', '<Tab>', '>>', silent },
@@ -333,9 +245,6 @@ map {
   -- Double-tap escape to leave terminal mode
   { 't', '<Esc><Esc>', '<C-\\><C-N>', silent },
 
-  -- Start terminal
-  { 'c', 'zsh', 'edit term://zsh', silent },
-
   -- Enter inserts newline
   { 'n', '<CR>', 'o<Esc>', silent },
   { 'n', '<S-CR>', 'O<Esc>', silent },
@@ -358,25 +267,25 @@ map {
   { 'n', 'P', '"+p', loud },
 
   -- Window resizing
-  { 'n', '+', ':resize +1<CR>', loud },
-  { 'n', '-', ':resize -1<CR>', loud },
-  { 'n', '<M-+>', ':vertical resize +1<CR>', loud },
-  { 'n', '<M-->', ':vertical resize -1<CR>', loud },
+  { 'n', '+', ':resize +1<CR>', silent },
+  { 'n', '-', ':resize -1<CR>', silent },
+  { 'n', '<M-+>', ':vertical resize +1<CR>', silent },
+  { 'n', '<M-->', ':vertical resize -1<CR>', silent },
 
-  { 'v', '+', ':resize +1<CR>', loud },
-  { 'v', '-', ':resize -1<CR>', loud },
-  { 'v', '<M-+>', ':vertical resize +1<CR>', loud },
-  { 'v', '<M-->', ':vertical resize -1<CR>', loud },
+  { 'v', '+', ':resize +1<CR>', silent },
+  { 'v', '-', ':resize -1<CR>', silent },
+  { 'v', '<M-+>', ':vertical resize +1<CR>', silent },
+  { 'v', '<M-->', ':vertical resize -1<CR>', silent },
 
-  { 't', '<M-+>', '<C-\\><C-N>:vertical resize +1<CR>i', loud },
-  { 't', '<M-->', '<C-\\><C-N>:vertical resize -1<CR>i', loud },
-  { 't', '<M-?>', '<C-\\><C-N>:resize +1<CR>i', loud },
-  { 't', '<M-_>', '<C-\\><C-N>:resize -1<CR>i', loud },
+  { 't', '<M-+>', '<C-\\><C-N>:vertical resize +1<CR>i', silent },
+  { 't', '<M-->', '<C-\\><C-N>:vertical resize -1<CR>i', silent },
+  { 't', '<M-?>', '<C-\\><C-N>:resize +1<CR>i', silent },
+  { 't', '<M-_>', '<C-\\><C-N>:resize -1<CR>i', silent },
 
   -- Telescope finding
-  { '', '<C-f>', ':Telescope find_files<CR>', loud},
-  { '', '<S-C-f>', ':Telescope live_grep<CR>', loud},
-  { '', '<A-f>', ':Telescope<CR>', loud},
+  { '', '<C-f>', ':Telescope find_files<CR>', silent},
+  { '', '<S-C-f>', ':Telescope live_grep<CR>', silent},
+  { '', '<A-f>', ':Telescope<CR>', silent},
 
   -- LSP bindings
   {'n', 'gn', '<cmd>lua vim.diagnostic.goto_next()<CR>', silent},
