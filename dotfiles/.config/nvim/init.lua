@@ -31,12 +31,17 @@ require('packer').startup(function (use)
           'powershell_es',
           'pylsp',
           'rust_analyzer',
-          'stylelint_lsp',
           'svelte',
           'tsserver',
           'typeprof',
           'vimls',
           'yamlls',
+          {
+            name = 'stylelint_lsp',
+            config = {
+              filetypes = { 'css', 'less', 'scss', 'sugarss', 'wxss' },
+            },
+          },
           {
             name = 'sumneko_lua',
             config = { settings = { Lua = {
