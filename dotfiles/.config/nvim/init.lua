@@ -7,7 +7,6 @@ require('packer').startup(function (use)
   use { -- Core
     'wbthomason/packer.nvim', -- Package manager
 
-
     { -- LSP configs
       -- Install most servers with
       -- $ npm install --global vscode-langservers-extracted stylelint-lsp typescript typescript-language-server yaml-language-server vim-language-server
@@ -16,6 +15,7 @@ require('packer').startup(function (use)
       config = function() require('utils').configure_lsp({
         config =  {
           on_attach = function(client, bufno)
+            -- Auto-format on save
             vim.cmd([[ autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync() ]])
           end,
         },
