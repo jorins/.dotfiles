@@ -88,8 +88,8 @@ function utils.configure_lsp(opts)
 
     -- If it's a table, extract name and override defaults
     elseif type(server) == 'table' then
-      name = server.name
-      for key, val in pairs(server.config) do
+      name = server.name or server[1]
+      for key, val in pairs(server.config or server[2]) do
         config[key] = val
       end
 
