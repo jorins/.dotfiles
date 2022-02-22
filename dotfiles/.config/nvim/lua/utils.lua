@@ -38,7 +38,7 @@ function utils.map(mode, combo, mapping, opts)
 end
 
 function utils.mapAll(mapTable)
-  for index, mapping in ipairs(mapTable) do
+  for _, mapping in ipairs(mapTable) do
     utils.map(mapping[1], mapping[2], mapping[3], mapping[4])
   end
 end
