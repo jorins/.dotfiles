@@ -100,6 +100,8 @@ require('packer').startup(function (use)
   use { -- GUI
     'junegunn/seoul256.vim', -- Theme
 
+    'folke/lsp-colors.nvim', -- Automatic theme fixing for LSP
+
     { -- File explorer
       'ms-jpq/chadtree',
       branch = 'chad',
