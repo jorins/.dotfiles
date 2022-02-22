@@ -113,6 +113,12 @@ require('packer').startup(function (use)
         require('gitsigns').setup()
       end
     },
+
+    { -- Issue panel
+      "folke/trouble.nvim",
+      requires = 'kyazdani42/nvim-web-devicons',
+      config = function() require('trouble').setup {} end
+    }
   }
 
   use { -- Utilities
@@ -291,6 +297,9 @@ map {
   { '', '<C-f>', ':Telescope find_files<CR>', silent},
   { '', '<S-C-f>', ':Telescope live_grep<CR>', silent},
   { '', '<A-f>', ':Telescope<CR>', silent},
+
+  -- Trouble
+  { '', '<M-t>', ':TroubleToggle<CR>', silent},
 
   -- LSP bindings
   {'n', 'gn', '<cmd>lua vim.diagnostic.goto_next()<CR>', silent},
