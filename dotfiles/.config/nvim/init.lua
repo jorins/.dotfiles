@@ -35,7 +35,13 @@ require('packer').startup(function (use)
           'tsserver',
           'typeprof',
           'vimls',
-          'yamlls',
+          {
+            name = 'yamlls',
+            config = {
+              settings = { yaml = {
+                ['https://json.schemastore.org/github-workflow.json'] = '/.github/workflows/*',
+            } } }
+          },
           {
             name = 'stylelint_lsp',
             config = {
