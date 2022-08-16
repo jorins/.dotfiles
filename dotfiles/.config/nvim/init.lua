@@ -293,6 +293,7 @@ map {
   { 'n', '<C-w>t', ':tabnew<CR>', silent},
   { 'n', '<C-tab>', ':tabnext<CR>', silent},
   { 'n', '<C-S-tab>', ':tabprevious<CR>', silent},
+
   -- Double-tap escape to leave terminal mode
   { 't', '<Esc><Esc>', '<C-\\><C-N>', silent },
 
