@@ -90,6 +90,8 @@ require('packer').startup(function (use)
         }
       end
     },
+
+    'mfussenegger/nvim-dap', -- Debugger
   }
 
   use { -- Extension
@@ -136,7 +138,12 @@ require('packer').startup(function (use)
       'folke/trouble.nvim',
       requires = 'kyazdani42/nvim-web-devicons',
       config = function() require('trouble').setup {} end
-    }
+    },
+
+    { -- Debugger UI
+      'rcarriga/nvim-dap-ui',
+      requires = { 'mfussenegger/nvim-dap' }
+    },
   }
 
   use { -- Utilities
