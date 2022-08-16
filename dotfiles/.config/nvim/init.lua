@@ -172,6 +172,15 @@ require('packer').startup(function (use)
       end
     },
 
+    { -- Automatic pairs
+      'windwp/nvim-autopairs',
+      config = function()
+        require('nvim-autopairs').setup({
+          check_ts = true,
+        })
+      end
+    },
+
     'junegunn/vim-easy-align', -- Alignment, not neovim based
 
     { -- Colour rendering
