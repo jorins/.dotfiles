@@ -15,8 +15,6 @@ require('packer').startup(function (use)
       config = function() require('utils').configure_lsp({
         config =  {
           on_attach = function(client, bufno)
-            -- Auto-format on save
-            vim.cmd([[ autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync() ]])
           end,
         },
 
@@ -143,6 +141,8 @@ require('packer').startup(function (use)
 
   use { -- Utilities
     'tversteeg/registers.nvim', -- Register peeking
+
+    'lukas-reineke/lsp-format.nvim', -- Format on save
 
     { -- Comments
       'numToStr/Comment.nvim',
