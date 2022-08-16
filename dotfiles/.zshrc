@@ -85,6 +85,7 @@ alias f="fzf"
 alias ft="fzf-tmux"
 alias :q="exit"
 alias v="nvim"
+alias pn="pnpm"
 
 #================#
 # Path additions #
@@ -134,3 +135,4 @@ export SSH_AUTH_SOCK="/run/user/$UID/gnupg/S.gpg-agent.ssh"
 gpg-connect-agent updatestartuptty /bye > /dev/null
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[[ -f ~/.config/tabtab/zsh/__tabtab.zsh ]] && . ~/.config/tabtab/zsh/__tabtab.zsh || true
