@@ -273,6 +273,10 @@ map {
   { 't', '<C-k>', '<C-\\><C-N><C-w>k', silent },
   { 't', '<C-l>', '<C-\\><C-N><C-w>l', silent },
 
+  -- Tab controls
+  { 'n', '<C-w>t', ':tabnew<CR>', silent},
+  { 'n', '<C-tab>', ':tabnext<CR>', silent},
+  { 'n', '<C-S-tab>', ':tabprevious<CR>', silent},
   -- Double-tap escape to leave terminal mode
   { 't', '<Esc><Esc>', '<C-\\><C-N>', silent },
 
