@@ -81,14 +81,9 @@ require('packer').startup(function (use)
             'typescript',
             'vim',
             'yaml',
-          highlight = {
-            enable = true,
           },
-
-          indent = {
-            enable = true,
-          },
-
+          highlight = { enable = true, },
+          indent = { enable = true, },
           textobjects = {
             lsp_interop = {
               enable = true,
@@ -140,7 +135,7 @@ require('packer').startup(function (use)
     },
 
     { -- Issue panel
-      "folke/trouble.nvim",
+      'folke/trouble.nvim',
       requires = 'kyazdani42/nvim-web-devicons',
       config = function() require('trouble').setup {} end
     }
