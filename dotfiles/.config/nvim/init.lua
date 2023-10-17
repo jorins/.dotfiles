@@ -211,14 +211,11 @@ require('packer').startup(function (use)
     { -- Indentation indicators
       'lukas-reineke/indent-blankline.nvim',
       config = function()
-        require('indent_blankline').setup {
-          space_char_blankline = ' ',
-          context_char = '¦',
-          show_current_context = true,
-          show_current_context_start = false,
-          use_treesitter = true,
-          char_list = {' '},
-        }
+        require('ibl').setup({
+          indent = {
+            char = '▏'
+          },
+        })
       end
     },
 
