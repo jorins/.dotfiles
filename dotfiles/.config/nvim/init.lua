@@ -120,8 +120,46 @@ require('packer').startup(function (use)
         },
       },
       config = function()
+        local function ripgrep(args)
+          if args == nil then
+            args = {}
+          end
+          local out = {
+            "rg",
+            "--no-config",
+            "--no-ignore",
+            "--hidden",
+            "--glob", "!**/.git/*",
+          }
+          for _, val in ipairs(args) do
+            table.insert(out, val)
+          end
+          return out
+        end
+
         local telescope = require('telescope')
-        telescope.setup {}
+        local telescopeConfig = require('telescope.config')
+
+        local vimgrep_arguments = { unpack(telescopeConfig.values.vimgrep_arguments) }
+        table.insert(vimgrep_arguments, '--hidden')
+        table.insert(vimgrep_arguments, '--glob')
+        table.insert(vimgrep_arguments, '!**/.git/*')
+
+        telescope.setup({
+          defaults = {
+            vimgrep_arguments = vimgrep_arguments,
+          },
+          pickers = {
+            find_files = {
+              hidden = true,
+              find_command = ripgrep({'--files'}),
+            },
+            live_grep = {
+              hidden = true,
+              find_command = ripgrep()
+            },
+          }
+        })
         telescope.load_extension('fzf')
       end
     },
