@@ -19,14 +19,25 @@ require('packer').startup(function (use)
         },
 
         servers = {
-          'bicep',
+          {
+            name = 'bicep',
+            config = {
+              cmd = {'dotnet', '/home/jorin/bicep-langserver/Bicep.LangServer.dll'},
+            }
+          },
+          'csharp_ls',
           'elixirls',
           'eslint',
           'gdscript',
           'gopls',
           'html',
           'jsonls',
-          'powershell_es',
+          {
+            name = 'powershell_es',
+            config = {
+              bundle_path = '/opt/powershell-editor-services'
+            }
+          },
           'pylsp',
           'rust_analyzer',
           'svelte',
