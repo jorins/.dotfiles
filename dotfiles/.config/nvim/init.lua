@@ -2,242 +2,28 @@ local utils = require('utils')
 local set = utils.set
 local map = utils.mapAll
 
+-- Bootstrap lazy.nvim
+-- Snippet from https://github.com/folke/lazy.nvim#-installation
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+
+-- Have to set auto start flag before require
+vim.g.coq_settings = {
+  auto_start = 'shut-up'
+}
+
 --[[ Plugins ]]--
-require('packer').startup(function (use)
-  use { -- Core
-    'wbthomason/packer.nvim', -- Package manager
-
-    { -- LSP configs
-      -- Install most servers with
-      -- $ pnpm install --global vscode-langservers-extracted stylelint-lsp typescript typescript-language-server yaml-language-server vim-language-server
-      'neovim/nvim-lspconfig',
-      requires = { 'ms-jpq/coq_nvim' },
-      config = function() require('utils').configure_lsp({
-        config =  {
-          on_attach = function(client, bufno)
-          end,
-        },
-
-        servers = {
-          {
-            name = 'bicep',
-            config = {
-              cmd = {'dotnet', '/home/jorin/bicep-langserver/Bicep.LangServer.dll'},
-            }
-          },
-          'csharp_ls',
-          'elixirls',
-          'eslint',
-          'gdscript',
-          'gopls',
-          'html',
-          'jsonls',
-          {
-            name = 'powershell_es',
-            config = {
-              bundle_path = '/opt/powershell-editor-services'
-            }
-          },
-          'pylsp',
-          'rust_analyzer',
-          'svelte',
-          'tsserver',
-          'typeprof',
-          'vimls',
-          {
-            name = 'yamlls',
-            config = {
-              settings = { yaml = {
-                ['https://json.schemastore.org/github-workflow.json'] = '/.github/workflows/*',
-            } } }
-          },
-          {
-            name = 'stylelint_lsp',
-            config = {
-              filetypes = { 'css', 'less', 'scss', 'sugarss', 'wxss' },
-            },
-          },
-          {
-            name = 'lua_ls',
-            config = { settings = { Lua = {
-              diagnostics = { globals = { 'vim' } },
-              workspace = { library = vim.api.nvim_get_runtime_file('', true), },
-              telemetry = { enable = false },
-          } } } },
-        },
-      }) end
-    },
-
-    { -- Treesitter
-      'nvim-treesitter/nvim-treesitter',
-      run = ':TSUpdate',
-      config = function()
-        require('nvim-treesitter.configs').setup {
-          ensure_installed = {
-            'bash',
-            'css',
-            'comment',
-            'elixir',
-            'go',
-            'html',
-            'javascript',
-            'jsdoc',
-            'json',
-            'lua',
-            'pug',
-            'query',
-            'rst',
-            'scss',
-            'typescript',
-            'vim',
-            'yaml',
-          },
-          highlight = { enable = true, },
-          indent = { enable = true, },
-          textobjects = {
-            lsp_interop = {
-              enable = true,
-            },
-          },
-        }
-      end
-    },
-
-    'mfussenegger/nvim-dap', -- Debugger
-  }
-
-  use { -- Extension
-    'ms-jpq/coq_nvim', -- Completion
-    'ms-jpq/coq.artifacts', -- Snippets
-
-    { -- Fuzzy finding
-      'nvim-telescope/telescope.nvim',
-      requires = {
-        'nvim-lua/plenary.nvim',
-        {
-          'nvim-telescope/telescope-fzf-native.nvim',
-          run = 'make',
-        },
-      },
-      config = function()
-        local function ripgrep(args)
-          if args == nil then
-            args = {}
-          end
-          local out = {
-            "rg",
-            "--no-config",
-            "--no-ignore",
-            "--hidden",
-            "--glob", "!**/.git/*",
-          }
-          for _, val in ipairs(args) do
-            table.insert(out, val)
-          end
-          return out
-        end
-
-        local telescope = require('telescope')
-        local telescopeConfig = require('telescope.config')
-
-        local vimgrep_arguments = { unpack(telescopeConfig.values.vimgrep_arguments) }
-        table.insert(vimgrep_arguments, '--hidden')
-        table.insert(vimgrep_arguments, '--glob')
-        table.insert(vimgrep_arguments, '!**/.git/*')
-
-        telescope.setup({
-          defaults = {
-            vimgrep_arguments = vimgrep_arguments,
-          },
-          pickers = {
-            find_files = {
-              hidden = true,
-              find_command = ripgrep({'--files'}),
-            },
-            live_grep = {
-              hidden = true,
-              find_command = ripgrep()
-            },
-          }
-        })
-        telescope.load_extension('fzf')
-      end
-    },
-  }
-
-  use { -- GUI
-    'junegunn/seoul256.vim', -- Theme
-
-    'folke/lsp-colors.nvim', -- Automatic theme fixing for LSP
-
-    { -- File explorer
-      'ms-jpq/chadtree',
-      branch = 'chad',
-      run = 'python3 -m chadtree deps',
-    },
-
-    { -- Git gutter
-      'lewis6991/gitsigns.nvim',
-      requires = { 'nvim-lua/plenary.nvim' },
-      config = function()
-        require('gitsigns').setup()
-      end
-    },
-
-    { -- Issue panel
-      'folke/trouble.nvim',
-      requires = 'kyazdani42/nvim-web-devicons',
-      config = function() require('trouble').setup {} end
-    },
-
-    { -- Debugger UI
-      'rcarriga/nvim-dap-ui',
-      requires = { 'mfussenegger/nvim-dap' }
-    },
-  }
-
-  use { -- Utilities
-    'tversteeg/registers.nvim', -- Register peeking
-
-    'lukas-reineke/lsp-format.nvim', -- Format on save
-
-    { -- Comments
-      'numToStr/Comment.nvim',
-      config = function()
-        require('Comment').setup()
-      end
-    },
-
-    { -- Indentation indicators
-      'lukas-reineke/indent-blankline.nvim',
-      config = function()
-        require('ibl').setup({
-          indent = {
-            char = '▏'
-          },
-        })
-      end
-    },
-
-    { -- Automatic pairs
-      'windwp/nvim-autopairs',
-      config = function()
-        require('nvim-autopairs').setup({
-          check_ts = true,
-        })
-      end
-    },
-
-    'junegunn/vim-easy-align', -- Alignment, not neovim based
-
-    { -- Colour rendering
-      'norcalli/nvim-colorizer.lua',
-      config = function()
-        require('colorizer').setup()
-      end
-    },
-  }
-end)
+require('lazy').setup('plugins')
 
 --[[ Options ]]--
 -- Theme
@@ -273,10 +59,6 @@ vim.g.chadtree_settings = { keymap = {
   primary = { '<Enter>', 'l' },
   collapse = { '<S-Tab>', '`', 'h' }
 }}
-
-vim.g.coq_settings = {
-  auto_start = 'shut-up'
-}
 
 --[[ Commands ]]--
 

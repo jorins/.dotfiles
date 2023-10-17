@@ -65,42 +65,4 @@ function utils.configurator(scope, prefix, separator)
   end
 end
 
-function utils.apply_config(name, config)
-  local lspconfig = require('lspconfig')
-  local coq = require('coq')
-  local coqify = coq.lsp_ensure_capabilities
-  lspconfig[name].setup(coqify(config))
-end
-
-function utils.configure_lsp(opts)
-  for _, server in ipairs(opts.servers) do
-    local name
-    local config = {}
-
-    -- Copy our defaults to the new table
-    for key, val in pairs(opts.config) do
-      config[key] = val
-    end
-
-    -- If it's a string, that's all we need
-    if type(server) == 'string' then
-      name = server
-
-    -- If it's a table, extract name and override defaults
-    elseif type(server) == 'table' then
-      name = server.name or server[1]
-      for key, val in pairs(server.config or server[2]) do
-        config[key] = val
-      end
-
-    else
-      -- It's neither, that's not right
-      error('Unhandled type of server specification')
-    end
-
-    -- Finally run the configuration with generated settings
-    utils.apply_config(name, config)
-  end
-end
-
 return utils
