@@ -85,25 +85,7 @@ alias ft="fzf-tmux"
 alias :q="exit"
 alias v="nvim"
 alias pn="pnpm"
-
-#================#
-# Path additions #
-#================#
-
-typeset -U path  # Keep only first occurence of each duplicate value
-
-path+="$HOME/.bin"
-path+="$HOME/.local/bin"
-path+="$HOME/bin"
-path+="$HOME/.npm-global/bin"
-path+="$HOME/.mix"
-path+="$HOME/.cargo/bin"
-path+="$HOME/.azure/bin"
-command -v ruby &>/dev/null && path+="$(ruby -e 'print Gem.user_dir')/bin"
-command -v go &>/dev/null && path+="$(go env GOPATH)/bin"
-
-export PATH
-command -v go &>/dev/null && export GOPATH="$(go env GOPATH)"
+alias px="pnpm dlx"
 
 #===============#
 # Powerlevel 9k #
@@ -135,3 +117,28 @@ gpg-connect-agent updatestartuptty /bye > /dev/null
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 [[ -f ~/.config/tabtab/zsh/__tabtab.zsh ]] && . ~/.config/tabtab/zsh/__tabtab.zsh || true
+
+#================#
+# Path additions #
+#================#
+
+# pnpm
+export PNPM_HOME="$HOME/.local/share/pnpm"
+# pnpm end
+
+command -v go &>/dev/null && export GOPATH="$(go env GOPATH)"
+
+typeset -U path  # Keep only first occurence of each duplicate value
+
+path+="$HOME/.bin"
+path+="$HOME/.local/bin"
+path+="$HOME/bin"
+path+="$HOME/.mix"
+path+="$HOME/.cargo/bin"
+path+="$HOME/.azure/bin"
+path+="$HOME/.dotnet/tools"
+path+="$PNPM_HOME"
+command -v ruby &>/dev/null && path+="$(ruby -e 'print Gem.user_dir')/bin"
+command -v go &>/dev/null && path+="$(go env GOPATH)/bin"
+
+export PATH
