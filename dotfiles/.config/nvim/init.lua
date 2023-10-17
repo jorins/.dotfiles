@@ -47,10 +47,11 @@ require('packer').startup(function (use)
             },
           },
           {
-            name = 'sumneko_lua',
+            name = 'lua_ls',
             config = { settings = { Lua = {
               diagnostics = { globals = { 'vim' } },
               workspace = { library = vim.api.nvim_get_runtime_file('', true), },
+              telemetry = { enable = false },
           } } } },
         },
       }) end
