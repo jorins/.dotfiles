@@ -33,7 +33,6 @@ zplug "changyuheng/zsh-interactive-cd"
 zplug "hlissner/zsh-autopair", defer:2
 zplug "Tarrasch/zsh-bd"
 zplug "laurenkt/zsh-vimto"
-zplug "lukechilds/zsh-nvm"  # Node version manager
 
 # Install plugins if there are plugins that have not been installed
 if ! zplug check --verbose; then

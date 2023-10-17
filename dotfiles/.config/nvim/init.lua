@@ -9,7 +9,7 @@ require('packer').startup(function (use)
 
     { -- LSP configs
       -- Install most servers with
-      -- $ npm install --global vscode-langservers-extracted stylelint-lsp typescript typescript-language-server yaml-language-server vim-language-server
+      -- $ pnpm install --global vscode-langservers-extracted stylelint-lsp typescript typescript-language-server yaml-language-server vim-language-server
       'neovim/nvim-lspconfig',
       requires = { 'ms-jpq/coq_nvim' },
       config = function() require('utils').configure_lsp({
