@@ -1,12 +1,17 @@
 local function ripgrep(args)
   args = args or {}
   local out = {
-    "rg",
-    "--no-config",
-    "--no-ignore",
-    "--hidden",
-    "--glob",
-    "!**/.git/*",
+    'rg',
+    '--color=never',
+    '--no-heading',
+    '--with-filename',
+    '--line-number',
+    '--column',
+    '--smart-case',
+    '--trim',
+    '--hidden',
+    '--glob',
+    '!**/.git/*',
   }
   for _, val in ipairs(args) do
     table.insert(out, val)
@@ -24,31 +29,16 @@ return {
       build = 'make',
     },
   },
-  config = function(plugin, opts)
-    local telescope = require('telescope')
-    local telescopeConfig = require('telescope.config')
-    telescope.setup({
-      opts = {
-        defaults = {
-          vimgrep_arguments = {
-            unpack(telescopeConfig.values.vimgrep_arguments),
-            '--hidden',
-            '--glob',
-            '!/**/.git/*'
-          },
-        },
-        pickers = {
-          find_files = {
-            hidden = true,
-            find_command = ripgrep({'--files'}),
-          },
-          live_grep = {
-            hidden = true,
-            find_command = ripgrep()
-          },
-        }
+  opts = {
+    defaults = {
+      vimgrep_arguments = ripgrep(),
+    },
+    pickers = {
+      find_files = {
+        hidden = true,
+        follow = true,
+        find_command = ripgrep({'--files'}),
       },
-    })
-    telescope.load_extension('fzf')
-  end
+    }
+  },
 }
