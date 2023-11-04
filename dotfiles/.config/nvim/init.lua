@@ -25,7 +25,8 @@ vim.g.coq_settings = {
 --[[ Plugins ]]--
 require('lazy').setup('plugins')
 
---[[ Options ]]--
+--[[ Options ]]
+--
 -- Theme
 vim.g.seoul256_background = 234
 vim.cmd 'colorscheme seoul256'
@@ -55,17 +56,23 @@ set {
   sidescrolloff = 10,
 }
 
-vim.g.chadtree_settings = { keymap = {
-  primary = { '<Enter>', 'l' },
-  collapse = { '<S-Tab>', '`', 'h' }
-}}
+vim.g.chadtree_settings = {
+  keymap = {
+    primary = { '<Enter>', 'l' },
+    collapse = { '<S-Tab>', '`', 'h' }
+  }
+}
 
 --[[ Commands ]]--
+vim.g.coq_settings = {
+  auto_start = 'shut-up'
+}
 
 -- Highlight on yank
 vim.cmd [[ autocmd TextYankPost * lua vim.highlight.on_yank {on_visual = true} ]]
 
---[[ Bindings ]]--
+--[[ Bindings ]]
+--
 local silent = {
   silent = true,
   noremap = true,
@@ -91,11 +98,11 @@ map {
   { 'n', '<Tab>', '>>', silent },
   { 'n', '<S-Tab>', '<<', silent },
   { 'v', '<Tab>', '>gv', silent },
-  { 'v', '<S-Tab>',  '<gv', silent },
+  { 'v', '<S-Tab>', '<gv', silent },
 
   -- Save with Ctrl+S
   -- May require setup with terminal emulator
-  { '',  '<C-S>', ':update<CR>', silent },
+  { '', '<C-S>', ':update<CR>', silent },
   { 'v', '<C-S>', '<C-C>:update<CR>', silent },
   { 'i', '<C-S>', '<C-O>:update<CR>', silent },
 
@@ -164,24 +171,24 @@ map {
   { 't', '<M-_>', '<C-\\><C-N>:resize -1<CR>i', silent },
 
   -- Telescope finding
-  { '', '<C-f>', ':Telescope find_files<CR>', silent},
-  { '', '<S-C-f>', ':Telescope live_grep<CR>', silent},
-  { '', '<A-f>', ':Telescope<CR>', silent},
+  { '', '<C-f>', ':Telescope find_files<CR>', silent },
+  { '', '<S-C-f>', ':Telescope live_grep<CR>', silent },
+  { '', '<A-f>', ':Telescope<CR>', silent },
 
   -- Trouble
-  { '', '<M-t>', ':TroubleToggle<CR>', silent},
+  { '', '<M-t>', ':TroubleToggle<CR>', silent },
 
   -- LSP bindings
-  {'n', 'gn', '<cmd>lua vim.diagnostic.goto_next()<CR>', silent},
-  {'n', 'gN', '<cmd>lua vim.diagnostic.goto_prev()<CR>', silent},
+  { 'n', 'gn', '<cmd>lua vim.diagnostic.goto_next()<CR>', silent },
+  { 'n', 'gN', '<cmd>lua vim.diagnostic.goto_prev()<CR>', silent },
   -- {'n', '<space>a', '<cmd>lua vim.lsp.buf.code_action()<CR>', silent},
-  {'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', silent},
+  { 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', silent },
   -- {'n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', silent},
-  {'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', silent},
-  {'n', 'cr', '<cmd>lua vim.lsp.buf.rename()<CR>', silent},
-  {'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', silent},
+  { 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', silent },
+  { 'n', 'cr', '<cmd>lua vim.lsp.buf.rename()<CR>', silent },
+  { 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', silent },
   -- {'n', '<space>s', '<cmd>lua vim.lsp.buf.document_symbol()<CR>', silent},
 
   -- Toggle file explorer with alt + E
-  {'', '<M-e>', ':CHADopen<CR>', silent}
+  { '', '<M-e>', ':CHADopen<CR>', silent }
 }

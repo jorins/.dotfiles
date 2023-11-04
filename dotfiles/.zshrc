@@ -49,18 +49,6 @@ zplug load
 # Aliases and functions #
 #=======================#
 
-# Aptitude
-alias apt-i="sudo apt install"
-alias apt-u="sudo apt update; sudo apt upgrade"
-
-# Pacman/yay
-alias yay-i="yay -S"
-alias yay-s="yay -Ss"
-alias yay-u="yay -Syu"
-alias yay-us='yay -S `pacman -Qu | cut -d" " -f1 | fzf -m`'
-alias yay-usa='yay -S `yay -Qu | cut -d" " -f1 | fzf -m`'
-alias yay-r="yay -R"
-
 # Git clone from clipboard
 gcx() {
   git clone `xclip -o -selection clipboard`
@@ -68,24 +56,17 @@ gcx() {
 
 # Query cht.sh
 cht() {
-  curl cht.sh/$1
+  curl $(echo "cht.sh/$*" | sed 's/ /+/g')
 }
 
 alias ls="ls --color=auto"
-alias la="ls --color=auto -A"
-alias lr="ls --color=auto -R"  # tree is honestly better
-alias ll="ls --color=auto -lh"
-alias lla="ls --color=auto -lhA"
-alias lal="ls --color=auto -lhA"
 alias -g xclo="xclip -o -selection clipboard"
 alias -g xcli="xclip -i -selection clipboard"
-alias mux="tmuxinator"
-alias f="fzf"
-alias ft="fzf-tmux"
 alias :q="exit"
 alias v="nvim"
 alias pn="pnpm"
 alias px="pnpm dlx"
+alias s="kitty +kitten ssh"
 
 #===============#
 # Powerlevel 9k #
@@ -122,10 +103,6 @@ gpg-connect-agent updatestartuptty /bye > /dev/null
 # Path additions #
 #================#
 
-# pnpm
-export PNPM_HOME="$HOME/.local/share/pnpm"
-# pnpm end
-
 command -v go &>/dev/null && export GOPATH="$(go env GOPATH)"
 
 typeset -U path  # Keep only first occurence of each duplicate value
@@ -137,8 +114,9 @@ path+="$HOME/.mix"
 path+="$HOME/.cargo/bin"
 path+="$HOME/.azure/bin"
 path+="$HOME/.dotnet/tools"
-path+="$PNPM_HOME"
+
 command -v ruby &>/dev/null && path+="$(ruby -e 'print Gem.user_dir')/bin"
 command -v go &>/dev/null && path+="$(go env GOPATH)/bin"
+command -v pnpm &>/dev/null && path+="$(pnpm bin -g)"
 
 export PATH
