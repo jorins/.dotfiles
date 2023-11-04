@@ -17,6 +17,20 @@ compinit
 
 autoload -U zmv
 
+#===============#
+# Powerlevel 9k #
+#===============#
+POWERLEVEL9K_MODE='nerdfont-complete'
+POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
+
+DEFAULT_USER="$(whoami)"
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status virtualenv root_indicator background_jobs)
+
+POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
+POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="|> "
+
 #=======#
 # Zplug #
 #=======#
@@ -68,20 +82,6 @@ alias pn="pnpm"
 alias px="pnpm dlx"
 alias s="kitty +kitten ssh"
 
-#===============#
-# Powerlevel 9k #
-#===============#
-POWERLEVEL9K_MODE='nerdfont-complete'
-POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
-
-DEFAULT_USER="$(whoami)"
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status virtualenv root_indicator background_jobs)
-
-POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
-POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="|> "
-
 #=======#
 # Misc. #
 #=======#
@@ -114,9 +114,9 @@ path+="$HOME/.mix"
 path+="$HOME/.cargo/bin"
 path+="$HOME/.azure/bin"
 path+="$HOME/.dotnet/tools"
+path+="$HOME/.local/share/pnpm"
 
 command -v ruby &>/dev/null && path+="$(ruby -e 'print Gem.user_dir')/bin"
 command -v go &>/dev/null && path+="$(go env GOPATH)/bin"
-command -v pnpm &>/dev/null && path+="$(pnpm bin -g)"
 
 export PATH
