@@ -7,6 +7,7 @@ return {
       'css',
       'comment',
       'elixir',
+      'gleam',
       'go',
       'html',
       'javascript',

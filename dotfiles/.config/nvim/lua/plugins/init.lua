@@ -9,6 +9,13 @@ return {
   'norcalli/nvim-colorizer.lua', -- Display colours of hex codes
   'numToStr/Comment.nvim', -- Comments
   'tversteeg/registers.nvim', -- Register peeking
+  -- 'gleam-lang/gleam.vim', -- Gleam support
+
+  { -- Surrounding
+    'kylechui/nvim-surround',
+    version = '*',
+    event = 'VeryLazy',
+  },
 
   { -- File explorer
     'ms-jpq/chadtree',
@@ -19,6 +26,16 @@ return {
   { -- Git gutter
     'lewis6991/gitsigns.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' },
+  },
+
+  { -- Git GUI
+    'NeogitOrg/neogit',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'sindrets/diffview.nvim',
+      'nvim-telescope/telescope.nvim'
+    },
+    config = true,
   },
 
   { -- Issue panel

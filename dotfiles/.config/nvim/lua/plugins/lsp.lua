@@ -12,6 +12,7 @@ return {
     'elixirls',
     'eslint',
     'gdscript',
+    'gleam',
     'gopls',
     'html',
     'jsonls',
@@ -32,6 +33,7 @@ return {
       config = {
         settings = { yaml = {
           ['https://json.schemastore.org/github-workflow.json'] = '/.github/workflows/*',
+          ['https://json.schemastore.org/github-action.json'] = '/.github/actions/*'
         } } }
     },
     {
