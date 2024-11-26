@@ -9,7 +9,13 @@ return {
       }
     },
     'csharp_ls',
-    'elixirls',
+    {
+      name = 'elixirls',
+      config = {
+        cmd = { "elixir-ls" },
+        on_attach = require("lsp-format").on_attach,
+      }
+    },
     'eslint',
     'gdscript',
     'gleam',
@@ -25,7 +31,7 @@ return {
     'pylsp',
     'rust_analyzer',
     'svelte',
-    'tsserver',
+    'ts_ls',
     'typeprof',
     'vimls',
     {
