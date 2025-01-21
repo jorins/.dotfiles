@@ -2,6 +2,7 @@ return {
   'neovim/nvim-lspconfig',
   dependencies = { 'ms-jpq/coq_nvim' },
   opts = {
+    'astro',
     {
       name = 'bicep',
       config = {
