@@ -98,6 +98,7 @@ gpg-connect-agent updatestartuptty /bye > /dev/null
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 [[ -f ~/.config/tabtab/zsh/__tabtab.zsh ]] && . ~/.config/tabtab/zsh/__tabtab.zsh || true
+[ -f /opt/asdf-vm/asdf.sh ] && . /opt/asdf-vm/asdf.sh
 
 #================#
 # Path additions #
