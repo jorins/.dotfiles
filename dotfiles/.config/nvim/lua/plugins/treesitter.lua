@@ -15,6 +15,7 @@ return {
         'javascript',
         'jsdoc',
         'json',
+        'latex',
         'lua',
         'pug',
         'query',

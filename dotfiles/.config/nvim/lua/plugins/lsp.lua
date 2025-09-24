@@ -17,6 +17,7 @@ return {
         on_attach = require("lsp-format").on_attach,
       }
     },
+    'digestif', -- LaTeX server
     'eslint',
     'gdscript',
     'gleam',
