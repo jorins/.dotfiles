@@ -57,6 +57,7 @@ return {
         telemetry = { enable = false },
       } } } },
   },
+
   config = function(plugin, opts)
     local lspconfig = require('lspconfig')
     local coq = require('coq')
@@ -80,7 +81,7 @@ return {
         error('Unhandled type of server specification:' .. type(server))
       end
 
-      lspconfig[name].setup(coqify(config))
+      vim.lsp.config(name, coqify(config))
     end
   end
 }
