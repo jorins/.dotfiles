@@ -1,1 +1,2 @@
-dotfiles/.config/nvim/plugin/packer_compiled.lua
+dotfiles/.config/nvim/spell/*.*.add
+dotfiles/.config/nvim/spell/*.*.add.spl
