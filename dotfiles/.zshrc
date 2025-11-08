@@ -89,7 +89,6 @@ export EDITOR="nvim"
 export LIBVIRT_DEFAULT_URI="qemu:///system"
 export MYGITDIR="$HOME/Git"
 export LESS="IFR"
-export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep"
 
 # GPG SSH agent
 export GPG_TTY="$(tty)"
