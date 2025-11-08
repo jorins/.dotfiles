@@ -90,10 +90,8 @@ export LIBVIRT_DEFAULT_URI="qemu:///system"
 export MYGITDIR="$HOME/Git"
 export LESS="IFR"
 
-# GPG SSH agent
-export GPG_TTY="$(tty)"
-export SSH_AUTH_SOCK="/run/user/$UID/gnupg/S.gpg-agent.ssh"
-gpg-connect-agent updatestartuptty /bye > /dev/null
+# Bitwarden SSH agent
+export SSH_AUTH_SOCK="$HOME/.bitwarden-ssh-agent.sock"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 [[ -f ~/.config/tabtab/zsh/__tabtab.zsh ]] && . ~/.config/tabtab/zsh/__tabtab.zsh || true
