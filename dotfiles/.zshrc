@@ -113,6 +113,7 @@ path+="$HOME/.cargo/bin"
 path+="$HOME/.azure/bin"
 path+="$HOME/.dotnet/tools"
 path+="$HOME/.local/share/pnpm"
+path+="/opt/nvim-linux-x86_64/bin"
 
 command -v ruby &>/dev/null && path+="$(ruby -e 'print Gem.user_dir')/bin"
 command -v go &>/dev/null && path+="$(go env GOPATH)/bin"
