@@ -41,7 +41,8 @@ return {
       config = {
         settings = { yaml = {
           ['https://json.schemastore.org/github-workflow.json'] = '/.github/workflows/*',
-          ['https://json.schemastore.org/github-action.json'] = '/.github/actions/*'
+          ['https://json.schemastore.org/github-action.json'] = '/.github/actions/*',
+          ['https://taskfile.dev/schema.json'] = 'Taskfile.yml'
         } } }
     },
     {
