@@ -81,6 +81,7 @@ alias v="nvim"
 alias pn="pnpm"
 alias px="pnpm dlx"
 alias s="kitty +kitten ssh"
+alias t="task"
 
 #=======#
 # Misc. #
