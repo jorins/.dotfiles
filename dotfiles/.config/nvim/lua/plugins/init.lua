@@ -11,6 +11,11 @@ return {
   'tversteeg/registers.nvim', -- Register peeking
   -- 'gleam-lang/gleam.vim', -- Gleam support
 
+  { -- LSP base configs
+    'neovim/nvim-lspconfig',
+    dependencies = { 'ms-jpq/coq_nvim' },
+  },
+
   { -- Surrounding
     'kylechui/nvim-surround',
     version = '*',
