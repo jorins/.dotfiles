@@ -69,4 +69,12 @@ return {
       check_ts = true,
     }
   },
+
+  { -- In-editor coverage view
+    'andythigpen/nvim-coverage',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    opts = {
+      auto_reload = true
+    }
+  }
 }
