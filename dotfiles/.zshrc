@@ -73,6 +73,15 @@ cht() {
   curl $(echo "cht.sh/$*" | sed 's/ /+/g')
 }
 
+# Open file or directory
+o() {
+  if [ "$1" = "" ]; then
+    xdg-open '.' 2>/dev/null
+  else
+    xdg-open $1 2>/dev/null
+  fi
+}
+
 alias ls="ls --color=auto"
 alias -g xclo="xclip -o -selection clipboard"
 alias -g xcli="xclip -i -selection clipboard"
