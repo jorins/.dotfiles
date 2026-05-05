@@ -1,3 +1,4 @@
+-- General purpose finder
 local function ripgrep(args)
   args = args or {}
   local out = {
@@ -21,14 +22,33 @@ end
 
 return {
   'nvim-telescope/telescope.nvim',
-  branch = '0.1.x',
+  version = '*',
   dependencies = {
     'nvim-lua/plenary.nvim',
-    {
-      'nvim-telescope/telescope-fzf-native.nvim',
-      build = 'make',
-    },
+    { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
   },
+
+  keys = {
+    {
+      '<C-f>',
+      ':Telescope find_files<CR>',
+      desc="Find files (Telescope)",
+      silent=true,
+    },
+    {
+      '<S-C-f>',
+      ':Telescope live_grep<CR>',
+      desc="Live grep (Telescope)",
+      silent=true,
+    },
+    {
+      '<A-f>',
+      ':Telescope<CR>',
+      desc="Find anything (Telescope)",
+      silent=true,
+    }
+  },
+
   opts = {
     defaults = {
       vimgrep_arguments = ripgrep(),
@@ -37,7 +57,7 @@ return {
       find_files = {
         hidden = true,
         follow = true,
-        find_command = ripgrep({'--files'}),
+        find_command = ripgrep({ '--files' }),
       },
     }
   },

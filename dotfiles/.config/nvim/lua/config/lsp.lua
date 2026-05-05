@@ -1,4 +1,5 @@
 local configure = function(opts)
+  -- Set up autocompletion integration
   local coq = require('coq')
   local coqify = coq.lsp_ensure_capabilities
 
@@ -27,19 +28,22 @@ end
 local opts = {
   -- Default configs
   'astro',
+  'basedpyright', -- Python type checker
   'csharp_ls',
+  'dartls',
   'digestif', -- LaTeX server
   'eslint',
   'gdscript',
   'gleam',
   'gopls',
+  'harper', -- Grammer checker
   'html',
   'jsonls',
   'ruff', -- Python formatter & linter
   'rust_analyzer',
   'svelte',
+  'tinymist', -- Typst language server
   'ts_ls',
-  -- 'ty',
   'vimls',
 
   { 'bicep', {
@@ -48,41 +52,11 @@ local opts = {
 
   { 'elixirls', {
     cmd = { "elixir-ls" },
-    on_attach = require("lsp-format").on_attach,
+    -- on_attach = require("lsp-format").on_attach,
   } },
 
   { 'powershell_es', {
     bundle_path = '/opt/powershell-editor-services'
-  } },
-
-  { 'pylsp', {
-    settings = {
-      pylsp = {
-        plugins = {
-          -- Force disable all the stuff I don't use.
-          -- 1st party
-          autopep8 = { enabled = false },
-          flake8 = { enabled = false },
-          mccabe = { enabled = false },
-          preload = { enabled = false },
-          pycodestyle = { enabled = false },
-          pydocstyle = { enabled = false },
-          pyflakes = { enabled = false },
-          pylint = { enabled = false },
-          yapf = { enabled = false },
-
-          -- 3rd party
-          isort = { enabled = false },
-          black = { enabled = false },
-          pylsp_rope = { enabled = false },
-          ruff = { enabled = false },
-
-          -- Formatting and linting handled by separate ruff server, so I only
-          -- want mypy from here.
-          pylsp_mypy = { enabled = true },
-        }
-      }
-    },
   } },
 
   { 'yamlls', {
@@ -110,7 +84,16 @@ local opts = {
   } },
 }
 
-return {
-  opts = opts,
-  configure = configure,
-}
+configure(opts)
+
+-- return {
+--   opts = opts,
+--   configure = configure,
+-- }
+
+-- vim.api.nvim_create_autocmd('LspAttach', {
+--   callback = function(args)
+--     local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
+--     require("lsp-format").on_attach(client, args.buf)
+--   end,
+-- })
