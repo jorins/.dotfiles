@@ -137,7 +137,7 @@ map {
   { 'n', 'gN',         '<cmd>lua vim.diagnostic.jump({count=-1, float=true})<CR>', silent },
   -- {'n', '<space>a', '<cmd>lua vim.lsp.buf.code_action()<CR>', silent},
   { 'n', 'gd',         '<cmd>lua vim.lsp.buf.definition()<CR>',                    silent },
-  -- {'n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', silent},
+  { 'n', 'gql',        '<cmd>lua vim.lsp.buf.format()<CR>',                        silent },
   { 'n', 'K',          '<cmd>lua vim.lsp.buf.hover()<CR>',                         silent },
   { 'n', 'cr',         '<cmd>lua vim.lsp.buf.rename()<CR>',                        silent },
   { 'n', 'gr',         '<cmd>lua vim.lsp.buf.references()<CR>',                    silent },
