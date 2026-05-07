@@ -14,7 +14,7 @@ return {
     }
   },
 
-  config = function()
+  init = function()
     vim.api.nvim_set_var("chadtree_settings", {
       keymap = {
         primary = { '<Enter>', 'l' },
