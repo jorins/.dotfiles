@@ -4,6 +4,7 @@ local map = utils.mapAll
 
 -- Load external configs
 require('config.lazy')
+require('config.treesitter')
 require('config.lsp')
 
 -- Basic settings
