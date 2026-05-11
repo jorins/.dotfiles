@@ -36,13 +36,12 @@ local opts = {
   'gdscript',
   'gleam',
   'gopls',
-  'harper', -- Grammer checker
+  -- 'harper_ls', -- Grammer checker
   'html',
   'jsonls',
   'ruff', -- Python formatter & linter
   'rust_analyzer',
   'svelte',
-  'tinymist', -- Typst language server
   'ts_ls',
   'vimls',
 
@@ -82,6 +81,20 @@ local opts = {
       }
     }
   } },
+
+  {
+    'tinymist', -- Typst language server
+    {
+      settings = {
+        formatterPrintWidth = 80,
+        formatterProseWrap = true,
+        lint = {
+          enabled = true,
+          when = "onType",
+        },
+      }
+    }
+  },
 }
 
 configure(opts)
