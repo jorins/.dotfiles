@@ -18,7 +18,9 @@ return {
     vim.api.nvim_set_var("chadtree_settings", {
       keymap = {
         primary = { '<Enter>', 'l' },
-        collapse = { '<S-Tab>', '`', 'h' }
+        collapse = { '<S-Tab>', '`', 'h' },
+        delete = {},
+        trash = { 'd', 't' }
       }
     })
   end
